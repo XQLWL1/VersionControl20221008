@@ -42,18 +42,18 @@ namespace UserMaintenance2022
             this.lblLastName.AutoSize = true;
             this.lblLastName.Location = new System.Drawing.Point(501, 50);
             this.lblLastName.Name = "lblLastName";
-            this.lblLastName.Size = new System.Drawing.Size(35, 13);
+            this.lblLastName.Size = new System.Drawing.Size(64, 13);
             this.lblLastName.TabIndex = 0;
-            this.lblLastName.Text = "label1";
+            this.lblLastName.Text = "Vezetéknév";
             // 
             // lblFirstName
             // 
             this.lblFirstName.AutoSize = true;
             this.lblFirstName.Location = new System.Drawing.Point(501, 87);
             this.lblFirstName.Name = "lblFirstName";
-            this.lblFirstName.Size = new System.Drawing.Size(35, 13);
+            this.lblFirstName.Size = new System.Drawing.Size(60, 13);
             this.lblFirstName.TabIndex = 1;
-            this.lblFirstName.Text = "label2";
+            this.lblFirstName.Text = "Keresztnév";
             // 
             // btnAdd
             // 
@@ -61,8 +61,9 @@ namespace UserMaintenance2022
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(182, 30);
             this.btnAdd.TabIndex = 2;
-            this.btnAdd.Text = "button1";
+            this.btnAdd.Text = "Hozzáadás";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // listBox1
             // 
