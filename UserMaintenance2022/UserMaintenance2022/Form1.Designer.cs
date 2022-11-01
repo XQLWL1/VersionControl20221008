@@ -34,6 +34,7 @@ namespace UserMaintenance2022
             this.label1 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.btnFajl = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnAdd
@@ -80,11 +81,22 @@ namespace UserMaintenance2022
             this.btnFajl.UseVisualStyleBackColor = true;
             this.btnFajl.Click += new System.EventHandler(this.btnFajl_Click);
             // 
+            // btnDelete
+            // 
+            this.btnDelete.Location = new System.Drawing.Point(310, 193);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(204, 30);
+            this.btnDelete.TabIndex = 9;
+            this.btnDelete.Text = "Törlés";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnFajl);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.label1);
@@ -104,6 +116,7 @@ namespace UserMaintenance2022
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Button btnFajl;
+        private System.Windows.Forms.Button btnDelete;
     }
 }
 

@@ -24,6 +24,7 @@ namespace UserMaintenance2022
             label1.Text = Resource1.FullName; //label1
             btnAdd.Text = Resource1.Add; // button1
             btnFajl.Text = Resource1.FajlbaIras; //button2
+            btnDelete.Text = Resource1.Delete; //button3
 
 
             //Lista adaforrása:
@@ -63,6 +64,12 @@ namespace UserMaintenance2022
                     }
                 }
             }
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            User választottUser = (User)listBox1.SelectedItem;
+            users.Remove(választottUser);
         }
     }
 }
