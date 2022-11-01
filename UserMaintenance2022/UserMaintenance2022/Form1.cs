@@ -51,17 +51,58 @@ namespace UserMaintenance2022
 
         private void btnFajl_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            //Fájlba írás, én adom meg a fájl típusát pl.: txt:
+            /*SaveFileDialog saveFileDialog = new SaveFileDialog();
             if (saveFileDialog.ShowDialog()==DialogResult.OK)
             {
                 //MessageBox.Show("próba mentés");
 
+                
                 using (StreamWriter streamWriter = new StreamWriter(saveFileDialog.FileName))
                 {
                     foreach (User item in users)
                     {
                         streamWriter.WriteLine(item.ID + ";" + item.FullName);
                     }
+                }
+
+            }*/
+
+
+
+            //CSV-be mentem ki a fájlt:
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            saveFileDialog.InitialDirectory = @"C:\Users\vivi22\Source\Repos\2022 ősz IRF\VersionControl20221008\UserMaintenance2022\UserMaintenance2022\bin\Debug";
+
+            // A kiválasztható fájlformátumokat adjuk meg ezzel a sorral. Jelen esetben csak a csv-t fogadjuk el
+            saveFileDialog.Filter = "Comma Seperated Values (*.csv)|*.csv";
+
+            // A csv lesz az alapértelmezetten kiválasztott kiterjesztés
+            saveFileDialog.DefaultExt = "csv";
+
+            // Ha ez igaz, akkor hozzáírja a megadott fájlnévhez a kiválasztott kiterjesztést, de érzékeli, ha a felhasználó azt is beírta és nem fogja duplán hozzáírni
+            saveFileDialog.AddExtension = true;
+
+            //a fájl nevét adom meg
+            saveFileDialog.FileName = "userList";
+
+            saveFileDialog.ShowDialog();
+
+            /*A StreamWriter paraméterei:
+             * 1) Fájlnév: mi itt azt a fájlnevet adjuk át, amit a felhasználó az sfd dialógusban megadott
+             * 2) Append: ha igaz és már létezik ilyen fájl, akkor a végéhez fűzi a sorokat, ha hamis, akkor felülírja a létező fájlt
+             * 3) Karakterkódolás: a magyar nyelvnek is megfelelő legáltalánosabb karakterkódolás az UTF8*/
+            using (StreamWriter sw = new StreamWriter(saveFileDialog.FileName, false, Encoding.UTF8))
+            {
+                //végig megyek a lista elemein, mert a StreamWriter részenként építi fel a sorokat.
+                foreach (var u1 in users)
+                {
+                    sw.Write(u1.ID);
+                    sw.Write(";");
+                    sw.Write(u1.FullName);
+
+                    sw.WriteLine();
                 }
             }
         }
