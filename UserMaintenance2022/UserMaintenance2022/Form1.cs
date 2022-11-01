@@ -20,8 +20,7 @@ namespace UserMaintenance2022
         {
             InitializeComponent();
 
-            lblLastName.Text = Resource1.LastName; // label1
-            lblFirstName.Text = Resource1.FirstName; // label2
+            label1.Text = Resource1.FullName;
             btnAdd.Text = Resource1.Add; // button1
 
 
@@ -41,8 +40,7 @@ namespace UserMaintenance2022
         {
             User user = new User();
 
-            user.FirstName = textBox1.Text;
-            user.LastName = textBox2.Text;
+            user.FullName = textBox3.Text;
 
             users.Add(user);
             
