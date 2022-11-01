@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,8 +21,9 @@ namespace UserMaintenance2022
         {
             InitializeComponent();
 
-            label1.Text = Resource1.FullName;
+            label1.Text = Resource1.FullName; //label1
             btnAdd.Text = Resource1.Add; // button1
+            btnFajl.Text = Resource1.FajlbaIras; //button2
 
 
             //Lista adaforrása:
@@ -44,6 +46,23 @@ namespace UserMaintenance2022
 
             users.Add(user);
             
+        }
+
+        private void btnFajl_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            if (saveFileDialog.ShowDialog()==DialogResult.OK)
+            {
+                //MessageBox.Show("próba mentés");
+
+                using (StreamWriter streamWriter = new StreamWriter(saveFileDialog.FileName))
+                {
+                    foreach (User item in users)
+                    {
+                        streamWriter.WriteLine(item.ID + ";" + item.FullName);
+                    }
+                }
+            }
         }
     }
 }
