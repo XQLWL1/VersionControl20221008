@@ -42,7 +42,7 @@ namespace UserMaintenance2022
             User user = new User();
 
             user.FirstName = textBox1.Text;
-            user.LastName = textBox2.Text;s
+            user.LastName = textBox2.Text;
 
             users.Add(user);
             
