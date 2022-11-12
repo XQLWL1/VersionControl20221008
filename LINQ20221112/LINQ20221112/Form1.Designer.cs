@@ -50,6 +50,7 @@ namespace LINQ20221112
             this.listCountries.Name = "listCountries";
             this.listCountries.Size = new System.Drawing.Size(120, 316);
             this.listCountries.TabIndex = 1;
+            this.listCountries.SelectedIndexChanged += new System.EventHandler(this.listCountries_SelectedIndexChanged);
             // 
             // dataGridView1
             // 
