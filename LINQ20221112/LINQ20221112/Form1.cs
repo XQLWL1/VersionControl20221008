@@ -15,7 +15,7 @@ namespace LINQ20221112
     {
 
         List<Country> countries = new List<Country>();
-        List<Ramen> ramen = new List<Ramen>();
+        List<Ramen> ramens = new List<Ramen>();
 
         public Form1()
         {
@@ -50,7 +50,20 @@ namespace LINQ20221112
                         Name = country
                     };
 
-                    countries.Add(eredmeny);
+                    //countries.Add(eredmeny);
+                    Country currentCountry = AddCountry(country); //aktuális ország
+
+                    Ramen ramen = new Ramen
+                    {
+                        ID = ramens.Count+1,
+                        CountryFK = currentCountry.ID,
+                        Country = currentCountry,
+                        Stars = Convert.ToDouble(sor[3]),
+                        Name = currentCountry.Name,
+                        Brand = sor[0]
+
+                    };
+                    ramens.Add(ramen);
                 }
             }
 
@@ -64,7 +77,7 @@ namespace LINQ20221112
 
         }
 
-        void AddCountry(string country)
+        Country AddCountry(string country)
         {
             var eredmeny = (from c in countries
                             where c.Name.Equals(country)
@@ -80,6 +93,7 @@ namespace LINQ20221112
 
                 countries.Add(eredmeny);
             }
+            return eredmeny; 
         }
 
         
