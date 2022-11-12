@@ -118,6 +118,18 @@ namespace LINQ20221112
             return eredmeny;
         }
 
+        void GetCountries()
+        {
+            var countriesList = from c in countries
+                                where c.Name.Contains(txtCountryFilter.Text)
+                                orderby c.Name
+                                select c;
+            listCountries.DataSource = countriesList.ToList();
+        }
 
+        private void txtCountryFilter_TextChanged(object sender, EventArgs e)
+        {
+            GetCountries();
+        }
     }
 }
