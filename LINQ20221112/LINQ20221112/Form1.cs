@@ -22,6 +22,7 @@ namespace LINQ20221112
         {
             InitializeComponent();
             LoadData("ramen.csv");
+            GetCountries();
         }
 
         void LoadData(string fileName)
@@ -125,6 +126,7 @@ namespace LINQ20221112
                                 orderby c.Name
                                 select c;
             listCountries.DataSource = countriesList.ToList();
+            listCountries.DisplayMember = "Name";
         }
 
         private void txtCountryFilter_TextChanged(object sender, EventArgs e)
