@@ -14,7 +14,8 @@ namespace LINQ20221112
     public partial class Form1 : Form
     {
 
-        List<Country> countries = new List<Country>(); 
+        List<Country> countries = new List<Country>();
+        List<Ramen> ramen = new List<Ramen>();
 
         public Form1()
         {
@@ -62,5 +63,25 @@ namespace LINQ20221112
 
 
         }
+
+        void AddCountry(string country)
+        {
+            var eredmeny = (from c in countries
+                            where c.Name.Equals(country)
+                            select c).FirstOrDefault();
+
+            if (eredmeny == null) //nincs ilyen ország a listában, újat létrehozunk
+            {
+                eredmeny = new Country
+                {
+                    ID = countries.Count,
+                    Name = country
+                };
+
+                countries.Add(eredmeny);
+            }
+        }
+
+        
     }
 }
