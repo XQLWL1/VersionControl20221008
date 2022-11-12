@@ -16,6 +16,7 @@ namespace LINQ20221112
 
         List<Country> countries = new List<Country>();
         List<Ramen> ramens = new List<Ramen>();
+        List<Brand> brands = new List<Brand>();
 
         public Form1()
         {
@@ -35,6 +36,7 @@ namespace LINQ20221112
             {
                 string[] sor = streamReader.ReadLine().Split(';'); //split felbontja tömbre ";" jel alapján
                 string country = sor[2];
+                string marka = sor[0];
                 //var eredmeny = countries.Where(i => i.Name.Equals(country)).FirstOrDefault(); //LINQ
 
                 //LINQ SQL-es:
@@ -52,6 +54,7 @@ namespace LINQ20221112
 
                     //countries.Add(eredmeny);
                     Country currentCountry = AddCountry(country); //aktuális ország
+                    Brand currentmarka = AddBrand(marka);
 
                     Ramen ramen = new Ramen
                     {
@@ -60,7 +63,7 @@ namespace LINQ20221112
                         Country = currentCountry,
                         Stars = Convert.ToDouble(sor[3]),
                         Name = currentCountry.Name,
-                        Brand = sor[0]
+                        Brand = currentmarka
 
                     };
                     ramens.Add(ramen);
@@ -96,6 +99,25 @@ namespace LINQ20221112
             return eredmeny; 
         }
 
-        
+        Brand AddBrand(string marka)
+        {
+            var eredmeny = (from c in brands
+                            where c.Name.Equals(brands)
+                            select c).FirstOrDefault();
+
+            if (eredmeny == null) //nincs ilyen ország a listában, újat létrehozunk
+            {
+                eredmeny = new Brand
+                {
+                    ID = brands.Count,
+                    Name = marka
+                };
+
+                brands.Add(eredmeny);
+            }
+            return eredmeny;
+        }
+
+
     }
 }
