@@ -152,6 +152,15 @@ namespace ExcelExport
             //keret beállítása, milyen típusú vonal és milyen vastagságú legyen
             fejlecRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
 
+            //egész táblázat bekeretezése:
+            Excel.Range tablazatRange = xlSheet.get_Range(GetCell(105, 1), GetCell(1, fejlec.Length));
+            tablazatRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+
+
+            //első oszlop adatai félkövérek:
+            Excel.Range elsooszlopRange = xlSheet.get_Range(GetCell(105, 1), GetCell(1,fejlec.Length-8));
+            elsooszlopRange.Font.Bold = true;
+
         }
 
 
