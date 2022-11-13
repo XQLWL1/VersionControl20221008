@@ -110,7 +110,8 @@ namespace ExcelExport
                 //Négyzetméter kiszámolása: Ár * 1.000.000/alapterület ->
                 //(szorzás azért kell, mert az Ár az MFt, a négyzetméternél meg Ft kell)
 
-                values[counter, 8] = "=" + GetCell(counter+2, 8); //első sor a fejléc, ezért counter+2
+                values[counter, 8] = "=" + GetCell(counter + 2, 8) + "*1000000/" + GetCell(counter + 2, 7);
+                //első sor a fejléc, ezért counter+2
 
                 counter++;
             }
