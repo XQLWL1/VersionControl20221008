@@ -104,7 +104,13 @@ namespace ExcelExport
                 values[counter, 5] = item.NumberOfRooms;
                 values[counter, 6] = item.FloorArea;
                 values[counter, 7] = item.Price;
-                values[counter, 8] = ""; //négyzetméter árat kalkuláció alapján kell majd kiszámolni, ezért üres
+
+                //values[counter, 8] = ""; 
+                //négyzetméter árat kalkuláció alapján kell majd kiszámolni, ezért üres
+                //Négyzetméter kiszámolása: Ár * 1.000.000/alapterület ->
+                //(szorzás azért kell, mert az Ár az MFt, a négyzetméternél meg Ft kell)
+
+                values[counter, 8] = "=" + GetCell(counter+2, 8); //első sor a fejléc, ezért counter+2
 
                 counter++;
             }
