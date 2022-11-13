@@ -147,7 +147,7 @@ namespace ExcelExport
             fejlecRange.RowHeight = 60;
 
             //cella színezése
-            fejlecRange.Interior.Color = Color.Salmon;
+            fejlecRange.Interior.Color = Color.LightSalmon;
 
             //keret beállítása, milyen típusú vonal és milyen vastagságú legyen
             fejlecRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
@@ -158,8 +158,20 @@ namespace ExcelExport
 
 
             //első oszlop adatai félkövérek:
-            Excel.Range elsooszlopRange = xlSheet.get_Range(GetCell(105, 1), GetCell(1,fejlec.Length-8));
+            Excel.Range elsooszlopRange = xlSheet.get_Range(GetCell(105,1), GetCell(2,fejlec.Length-8));
             elsooszlopRange.Font.Bold = true;
+            elsooszlopRange.Interior.Color = Color.LightYellow;
+
+            //utolsó oszlop formázása - zöld, ezres tagolás és két tizedesjegy
+            Excel.Range utolsooszlopRange = xlSheet.get_Range(GetCell(105, 9), GetCell(2, fejlec.Length));
+            utolsooszlopRange.Interior.Color = Color.LightGreen;
+            
+            //utolsooszlopRange.NumberFormat = "0,00.##"; 
+            //--> itt csak 2 tizedesre kerekít,
+            //de ahol nem volt tizedes jegy, ott csak a vesszőt rakja be, a tizedes jegyeket nem
+
+            //két tizedes és ezres tagolás --> EZ A JÓ:
+            utolsooszlopRange.NumberFormat = "_-* # ##0.00_-;-* # ##0.00_-;_-* \" - \"??_-;_-@_-";
 
         }
 
