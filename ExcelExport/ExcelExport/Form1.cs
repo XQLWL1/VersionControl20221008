@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Reflection; //technikai könyvtár, excel hiányzó adatait ezzel lehet kezelni, mert ebben van olyan érték, mely az excelnek megfelel
 
 namespace ExcelExport
 {
@@ -28,7 +30,7 @@ namespace ExcelExport
 
         void LoadData()
         {
-            Flats = context.Flats.ToList();
+            Flats = context.Flats.ToList(); // flat elemekből álló lista bemásolása
         }
     }
 }
