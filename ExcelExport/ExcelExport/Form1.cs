@@ -126,6 +126,32 @@ namespace ExcelExport
                 GetCell(1 + values.GetLength(0), values.GetLength(1)) //values.GetLength(0): lakásoknak és az oszlopfejléceknek a db száma
                 ).Value2 = values; //Value2 az az amibe az értéket bele kell írni
 
+
+            //A kód egy változóban tárolja a kérdéses cellák intervallumát
+            Excel.Range fejlecRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, fejlec.Length));
+
+            //különböző paraméterek beállítása:
+            //vastagbetű
+            fejlecRange.Font.Bold = true; 
+
+            //merre rendezzük a tartalmat? vertikális közép
+            fejlecRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+
+            //merre rendezzük a tartalmat? függőleges közép
+            fejlecRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+
+            //cella méretezése automatikusan a szó hosszúságához
+            fejlecRange.EntireColumn.AutoFit();
+
+            //cella magasságának megnagyobbítása
+            fejlecRange.RowHeight = 60;
+
+            //cella színezése
+            fejlecRange.Interior.Color = Color.Salmon;
+
+            //keret beállítása, milyen típusú vonal és milyen vastagságú legyen
+            fejlecRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+
         }
 
 
