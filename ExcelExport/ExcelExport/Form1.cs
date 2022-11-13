@@ -66,7 +66,58 @@ namespace ExcelExport
 
         private void CreateTable()
         {
+            string[] fejlec = new string[]
+            {
+                "Kód",
+                "Eladó",
+                "Oldal",
+                "Kerület",
+                "Lift",
+                "Szobák száma",
+                "Alapterület (m2)",
+                "Ár (mFt)",
+                "Négyzetméterár (Ft/m2)"
+            };
 
+            xlSheet.Cells[1, 1] = "Teszt"; //Teszt szó kiírása próbaképpen
+
+            for (int i = 1; i <= fejlec.Length; i++)
+            {
+                xlSheet.Cells[1, i] = fejlec[i - 1]; //fejléc egymás mellé kerül
+            }
+
+            //Két dimenziós tömb létrehozása az adatok tárolására.
+            //sor és oszlop száma lesz a mérete a táblázatnak
+            //nem csak szöveg, hanem szám típusú változók is vannak, ezért object tömbünk van
+            object[,] values = new object[Flats.Count, fejlec.Length];
+
+            //values nevű tömb feltöltése az adatokkal
+            int counter = 0;
+
+            foreach (Flat item in Flats)
+            {
+                values[counter, 0] = item.Code;
+                values[counter, 1] = item.Vendor;
+                values[counter, 2] = item.Side;
+                values[counter, 3] = item.District;
+                values[counter, 4] = item.Elevator;
+                values[counter, 5] = item.NumberOfRooms;
+                values[counter, 6] = item.FloorArea;
+                values[counter, 7] = item.Price;
+                values[counter, 8] = ""; //négyzetméter árat kalkuláció alapján kell majd kiszámolni, ezért üres
+
+                counter++;
+            }
+
+            //A segédfüggvény felhasználásával írd ki a values tömb tartalmát az Excel fájlba.
+            //get_Range: az excel osztály nem hozza a hivatkozást,
+            //paramétereit se ismeri. Bal felső és jobb alsó sarkát adja meg.
+            
+            xlSheet.get_Range
+                (
+                GetCell(2, 1), //2,1-ből indulunk
+                GetCell(1 + values.GetLength(0), values.GetLength(1)) //values.GetLength(0): lakásoknak és az oszlopfejléceknek a db száma
+                ).Value2 = values; //Value2 az az amibe az értéket bele kell írni
 
         }
 
@@ -74,6 +125,28 @@ namespace ExcelExport
         void LoadData()
         {
             Flats = context.Flats.ToList(); // flat elemekből álló lista bemásolása
+        }
+
+        private string GetCell(int x, int y) //x és y koorniták
+        {
+            string ExcelCoordinate = "";
+            int dividend = y; //y koordinátával kezd, amit egyre jobban csökkenteni fog
+            int modulo;
+
+            while (dividend > 0)
+            {
+                modulo = (dividend - 1) % 26; //angol ABC karakterszáma a 26-os
+
+                //65 maradékánál fogja összetenni, hogy milyen betűnél járunk
+                //65: a nagy A betű az ASCII tábla szerint
+                ExcelCoordinate = Convert.ToChar(65 + modulo).ToString() + ExcelCoordinate; 
+
+                dividend = (int)((dividend - modulo) / 26);
+            }
+
+            ExcelCoordinate += x.ToString();
+
+            return ExcelCoordinate;
         }
     }
 }
