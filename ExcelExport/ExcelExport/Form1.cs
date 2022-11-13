@@ -32,23 +32,44 @@ namespace ExcelExport
 
         private void CreateExcel()
         {
-            //throw new NotImplementedException();
+            /*try and catch használata
+             hibakezelő
+            mivel beragadhat az excel, ezért kell a hibakezelés, */
 
-            xlApp = new Excel.Application (); //új excel létrehozás
-            xlWB = xlApp.Workbooks.Add (); //az excelen belüli workbook és sheet kiválasztása - hova írhatok adatot
-            xlSheet = xlWB.ActiveSheet;
+            try
+            {
+                xlApp = new Excel.Application(); //új excel létrehozás
+                xlWB = xlApp.Workbooks.Add(); //az excelen belüli workbook és sheet kiválasztása - hova írhatok adatot
+                xlSheet = xlWB.ActiveSheet;
 
-            //CreateTable();
+                CreateTable();
 
-            xlApp.Visible= true; //felhasználó számára elérhetővétesszük az alkalmazást:
-            xlApp.UserControl = true; //felhasználó általi vezérlés engedélyezése
+                xlApp.Visible = true; //felhasználó számára elérhetővétesszük az alkalmazást:
+                xlApp.UserControl = true; //felhasználó általi vezérlés engedélyezése
+
+            }
+            catch (Exception exception) 
+            //éppen aktuális hibához juthatunk hozzá, ha példányként hozzáférhetővé tesszük az exception objektumot
+            {
+                string errorMessage=exception.Message;
+                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                //hibás excelek bezárása
+                xlWB.Close(false, Type.Missing, Type.Missing);
+                xlApp.Quit();
+                xlWB= null;
+                xlApp= null;
+            }
+            
 
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void CreateTable()
         {
 
+
         }
+
 
         void LoadData()
         {
