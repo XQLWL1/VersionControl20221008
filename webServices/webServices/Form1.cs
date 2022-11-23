@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,46 +11,81 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml;
 using webServices.Entities;
+using webServices.MnbServiceReference;
 
 namespace webServices
 {
     public partial class Form1 : Form
     {
         BindingList<RateData> rates = new BindingList<RateData>();
-        private string resultstring;
         BindingList<string> currencies = new BindingList<string>();
 
         public Form1()
         {
             InitializeComponent();
 
-            var mnbService = new webServices.MnbServiceReference.MNBArfolyamServiceSoapClient();
+            //egybe kell szervezni az alábbi függvényeket:
+            //XML(getRates());
 
-            var request = new webServices.MnbServiceReference.GetExchangeRatesRequestBody()
-            {
-                currencyNames = "EUR",
-                startDate="2020-01-01",
-                endDate="2020-06-30"
-            };
+            //chartData();
 
-            var response = mnbService.GetExchangeRates(request);
-            var result = response.GetExchangeRatesResult;
+            /*Ehhez kijelölöm a 3 függvényt, jobb klikk, Qick actions and refactorings, extract method,
+            elnevezem az új függvényt, 
+            apply*/
 
-
-            XML(resultstring);
-            resultstring = 
-
-            chartData();
-
-            currencyXml(getCurrenies())
+            currencyXml(getCurrencies());
 
             RefreshData();
 
         }
 
+        private void RefreshData()
+        {
+            //ürítsd le a Rates lista tartalmát
+            rates.Clear();
+
+            //XML meghívása:
+            XML(getRates());
+
+            //dataGridView adatforrás beállítása:
+            dataGridView1.DataSource = rates;
+
+            //valuta adatforrásának beállítása:
+            comboBox1.DataSource = currencies;
+
+            chartData();
+
+        }
+
+        private void chartData()
+        {
+            chartRateData.DataSource = rates;
+
+            //A tömb első elemét érdemes lekérdezni egy változóba,
+            //hogy könnyebb legyen átírni a tulajdonságait.
+            var series = chartRateData.Series[0];
+
+            series.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series.XValueMember = "Date";
+            series.YValueMembers = "Value";
+            series.BorderWidth = 2; //Az adatsor vastagsága legyen kétszeres
+
+            //Ne látszódjon oldalt a címke (legend)
+            var legend = chartRateData.Legends[0];
+            legend.Enabled = false;
+
+            //Ne látszódjanak a fő grid vonalak se az X, se az Y tengelyen
+            var chartArea = chartRateData.ChartAreas[0];
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisY.MajorGrid.Enabled = false;
+
+            //Az Y tengely ne nullától induljon(ez egy bool tulajdonság)
+            chartArea.AxisY.IsStartedFromZero = false;
+        }
+
         public void XML(string resultstring)
         {
-            var xml = new XmlDocument();
+            XmlDocument xml = new XmlDocument();
             xml.LoadXml(resultstring);
 
             foreach (XmlElement item in xml.DocumentElement)
@@ -73,7 +109,7 @@ namespace webServices
                     //az egységhez tartozó érték pedig a gyermek elem InnerText tulajdonságából kapható meg
                     rateData.Value = decimal.Parse(childElement.InnerText);
 
-                    if (unit!=0)
+                    if (unit != 0)
                     {
                         rateData.Value = rateData.Value / unit;
                     }
@@ -89,6 +125,8 @@ namespace webServices
         //Az 5. feladatban leírtak alapján a visszakapott XML-ből töltsd fel a Currencies listát
         private void currencyXml(string xmlstring)
         {
+            currencies.Clear();
+
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(xmlstring);
 
@@ -98,53 +136,42 @@ namespace webServices
                 currencies.Add(s);
             }
         }
-        
 
-        private void chartData()
+        private string getCurrencies()
         {
-            chartRateData.DataSource = rates;
+            var mnbService = new webServices.MnbServiceReference.MNBArfolyamServiceSoapClient();
 
-            Series series = chartRateData.Series[0];
-            series.ChartType = SeriesChartType.Line;
-            series.XValueMember = "Date";
-            series.YValueMembers = "Value";
-            series.BorderWidth = 2; //Az adatsor vastagsága legyen kétszeres
+            GetCurrenciesRequestBody req = new GetCurrenciesRequestBody();
+            var response1 = mnbService.GetCurrencies(req);
 
-            //Ne látszódjon oldalt a címke (legend)
-            var legend = chartRateData.Legends[0];
-            legend.Enabled = false;
+            string result = response1.GetCurrenciesResult;
 
-            //Ne látszódjanak a fő grid vonalak se az X, se az Y tengelyen
-            var chartArea = chartRateData.ChartAreas[0];
-            chartArea.AxisX.MajorGrid.Enabled = false;
-            chartArea.AxisY.MajorGrid.Enabled = false;
+            File.WriteAllText("currency.xml", result);
 
-            //Az Y tengely ne nullától induljon(ez egy bool tulajdonság)
-            chartArea.AxisY.IsStartedFromZero = false;
-        }
-
-        private void RefreshData()
-        {
-            //ürítsd le a Rates lista tartalmát
-            rates.Clear();
-
-            //valuta adatforrásának beállítása:
-            comboBox1.DataSource = currencies;
+            return response1.GetCurrenciesResult;
 
         }
 
-        private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+        private string getRates()
         {
-            dataGridView1.DataSource = rates;
+            var mnbService = new MNBArfolyamServiceSoapClient();
 
-            //A tömb első elemét érdemes lekérdezni egy változóba,
-            //hogy könnyebb legyen átírni a tulajdonságait.
-            var series = chartRateData.Series[0];
+            GetExchangeRatesRequestBody req = new GetExchangeRatesRequestBody();
 
-            series.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series.XValueMember = "Date";
-            series.YValueMembers = "Value";
+            /*Át kell alakítani az alábbi 3 sort, mivel az adatokat a form1-re rakott felületről kell vennie
+             * req.currencyNames = "EUR";
+            req.startDate = "2020-01-01";
+            req.endDate = "2020-6-30";*/
 
+            req.currencyNames = (string)comboBox1.SelectedItem;
+            req.startDate = dateTimePicker1.Value.ToString("yyyy-MM-dd");
+            req.endDate = dateTimePicker2.Value.ToString("yyyy-MM-dd");
+
+            var response = mnbService.GetExchangeRates(req);
+            //var result = response.GetExchangeRatesResult;
+            return response.GetExchangeRatesResult;
+
+            //File.WriteAllText("text.xml", result);
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
