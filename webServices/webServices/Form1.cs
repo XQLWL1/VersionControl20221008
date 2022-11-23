@@ -15,6 +15,7 @@ namespace webServices
     public partial class Form1 : Form
     {
         BindingList<RateData> rates = new BindingList<RateData>();
+        private string resultstring;
 
         public Form1()
         {
@@ -33,8 +34,10 @@ namespace webServices
             var result = response.GetExchangeRatesResult;
 
 
-            XML();
+            XML(resultstring);
             
+            chartData();
+
         }
 
         public void XML(string resultstring)
@@ -76,11 +79,37 @@ namespace webServices
             }
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        public void chartData()
         {
-            dataGridView1.DataSource= rates;
+            chartRateData.DataSource = rates;
         }
 
-        
+        private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+            dataGridView1.DataSource = rates;
+
+            //A tömb első elemét érdemes lekérdezni egy változóba,
+            //hogy könnyebb legyen átírni a tulajdonságait.
+            var series = chartRateData.Series[0];
+
+            series.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series.XValueMember = "Date";
+            series.YValueMembers = "Value";
+            series.BorderWidth = 2; //Az adatsor vastagsága legyen kétszeres
+
+            //Ne látszódjon oldalt a címke(legend)
+            var legend = chartRateData.Legends[0];
+            legend.Enabled = false;
+
+            //Ne látszódjanak a fő grid vonalak se az X, se az Y tengelyen
+            var chartArea = chartRateData.ChartAreas[0];
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisY.MajorGrid.Enabled = false;
+
+            //Az Y tengely ne nullától induljon(ez egy bool tulajdonság)
+            chartArea.AxisY.IsStartedFromZero = false;
+
+        }
+
     }
 }
