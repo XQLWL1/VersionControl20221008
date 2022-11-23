@@ -40,6 +40,8 @@ namespace webServices
 
             chartData();
 
+            RefreshData();
+
         }
 
         public void XML(string resultstring)
@@ -104,6 +106,14 @@ namespace webServices
             chartArea.AxisY.IsStartedFromZero = false;
         }
 
+        private void RefreshData()
+        {
+            //ürítsd le a Rates lista tartalmát
+            rates.Clear();
+
+
+        }
+
         private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
             dataGridView1.DataSource = rates;
@@ -118,5 +128,19 @@ namespace webServices
 
         }
 
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
     }
 }
