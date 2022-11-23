@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml;
 using webServices.Entities;
 
@@ -35,7 +36,8 @@ namespace webServices
 
 
             XML(resultstring);
-            
+            resultstring = 
+
             chartData();
 
         }
@@ -79,9 +81,27 @@ namespace webServices
             }
         }
 
-        public void chartData()
+        private void chartData()
         {
             chartRateData.DataSource = rates;
+
+            Series series = chartRateData.Series[0];
+            series.ChartType = SeriesChartType.Line;
+            series.XValueMember = "Date";
+            series.YValueMembers = "Value";
+            series.BorderWidth = 2; //Az adatsor vastagsága legyen kétszeres
+
+            //Ne látszódjon oldalt a címke (legend)
+            var legend = chartRateData.Legends[0];
+            legend.Enabled = false;
+
+            //Ne látszódjanak a fő grid vonalak se az X, se az Y tengelyen
+            var chartArea = chartRateData.ChartAreas[0];
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisY.MajorGrid.Enabled = false;
+
+            //Az Y tengely ne nullától induljon(ez egy bool tulajdonság)
+            chartArea.AxisY.IsStartedFromZero = false;
         }
 
         private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
@@ -95,19 +115,6 @@ namespace webServices
             series.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series.XValueMember = "Date";
             series.YValueMembers = "Value";
-            series.BorderWidth = 2; //Az adatsor vastagsága legyen kétszeres
-
-            //Ne látszódjon oldalt a címke(legend)
-            var legend = chartRateData.Legends[0];
-            legend.Enabled = false;
-
-            //Ne látszódjanak a fő grid vonalak se az X, se az Y tengelyen
-            var chartArea = chartRateData.ChartAreas[0];
-            chartArea.AxisX.MajorGrid.Enabled = false;
-            chartArea.AxisY.MajorGrid.Enabled = false;
-
-            //Az Y tengely ne nullától induljon(ez egy bool tulajdonság)
-            chartArea.AxisY.IsStartedFromZero = false;
 
         }
 
