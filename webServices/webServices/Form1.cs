@@ -17,6 +17,7 @@ namespace webServices
     {
         BindingList<RateData> rates = new BindingList<RateData>();
         private string resultstring;
+        BindingList<string> currencies = new BindingList<string>();
 
         public Form1()
         {
@@ -39,6 +40,8 @@ namespace webServices
             resultstring = 
 
             chartData();
+
+            currencyXml(getCurrenies())
 
             RefreshData();
 
@@ -83,6 +86,20 @@ namespace webServices
             }
         }
 
+        //Az 5. feladatban leírtak alapján a visszakapott XML-ből töltsd fel a Currencies listát
+        private void currencyXml(string xmlstring)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(xmlstring);
+
+            foreach (XmlElement item in xml.DocumentElement.ChildNodes[0])
+            {
+                string s = item.InnerText;
+                currencies.Add(s);
+            }
+        }
+        
+
         private void chartData()
         {
             chartRateData.DataSource = rates;
@@ -111,6 +128,8 @@ namespace webServices
             //ürítsd le a Rates lista tartalmát
             rates.Clear();
 
+            //valuta adatforrásának beállítása:
+            comboBox1.DataSource = currencies;
 
         }
 
