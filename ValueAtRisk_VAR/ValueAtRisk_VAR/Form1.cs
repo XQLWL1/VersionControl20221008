@@ -19,6 +19,8 @@ namespace ValueAtRisk_VAR
 
         List<PortfolioItem> portfolios = new List<PortfolioItem>();
 
+        List<decimal> Nyereségek;
+
         public Form1()
         {
             InitializeComponent();
@@ -27,6 +29,48 @@ namespace ValueAtRisk_VAR
             dataGridView1.DataSource=ticks;
 
             CreatePortfolio();
+
+            Nyereseg();
+        }
+
+        private void Nyereseg()
+        {
+            Nyereségek = new List<decimal>();
+
+            //intervallum beállítása, ami 30 --> ablak mérete
+            int intervalum = 30;
+
+            //kezdő dátum: kereskedés kezdete
+            DateTime kezdőDátum = (from x in ticks select x.TradingDay).Min();
+
+            //záródátum: 2016.12.30
+            DateTime záróDátum = new DateTime(2016, 12, 30);
+
+            //két dátum különbségére használható:
+            TimeSpan z = záróDátum - kezdőDátum;
+
+            //számláló ciklus. A napok különbsége mínusz az intervallum
+            //lekéri a portófiló értékét: 0-val kezdünk, ezért az 30 lesz, majd vesszük az 1. nap értékét és
+            //a kettőt kivonjuk egymásból, majd ezt hozzáadjuk a nyereségekhez.
+            //addig csináljuk, amíg el nem érjük a 2016.12.30-at.
+            for (int i = 0; i < z.Days - intervalum; i++)
+            {
+                decimal ny = GetPortfolioValue(kezdőDátum.AddDays(i + intervalum))
+                           - GetPortfolioValue(kezdőDátum.AddDays(i));
+                Nyereségek.Add(ny);
+
+                //ezt kiírjuk:
+                Console.WriteLine(i + " " + ny);
+            }
+
+            ////Lesz egy lista, mely a nyereségeket mutatja meg az adott napokon és rendezi
+            var nyereségekRendezve = (from x in Nyereségek
+                                      orderby x
+                                      select x)
+                                        .ToList();
+
+            //A listás értéket 5-el elosztja. Ez lesz a VAR (value at risk) érték
+            MessageBox.Show(nyereségekRendezve[nyereségekRendezve.Count() / 5].ToString());
         }
 
         private void CreatePortfolio()
