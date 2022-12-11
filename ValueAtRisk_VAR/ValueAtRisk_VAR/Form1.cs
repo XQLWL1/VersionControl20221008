@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,10 @@ namespace ValueAtRisk_VAR
 
         private void Nyereseg()
         {
+            //A mentés miatt ennek a listának nem csak ebben a függvényben kell látszódnia.
+            //Osztály szintjére átt kell tenni
+            //List<decimal> Nyereségek = new List<decimal>();
+
             Nyereségek = new List<decimal>();
 
             //intervallum beállítása, ami 30 --> ablak mérete
@@ -112,6 +117,26 @@ namespace ValueAtRisk_VAR
                 value += (decimal)last.Price * item.Volume; 
             }
             return value;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            if (saveFileDialog.ShowDialog()==DialogResult.OK)
+            {
+                using (StreamWriter streamWriter = new StreamWriter(saveFileDialog.FileName))
+                {
+
+                    int counter = 1;
+
+                    foreach (decimal item in Nyereségek)
+                    {
+                        streamWriter.WriteLine(string.Format("{0};{1}", counter, item));
+                        counter++;
+                    }
+                }
+            }
         }
     }
 }
